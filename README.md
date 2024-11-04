@@ -1,66 +1,249 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Pizza Restaurant API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Description
 
-## About Laravel
+ An API for tracking pizza restaurants.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Project Setup
+Once you have the plan in place for the application you want to build take the following steps:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- Create a new Laravel project.
+- Create a new GitHub repository.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Technologies Used
 
-## Learning Laravel
+1. Laravel
+2. SQLite
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Project Guidelines
+Your project should conform to the following set of guidelines:
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Models
+You need to create the following relationships:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- A `Restaurant` has many `Pizza`s through `RestaurantPizza`
 
-## Laravel Sponsors
+- A `Pizza` has many `Restaurants through `RestaurantPizza`
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- A `RestaurantPizza` belongs to a `Restaurant` and belongs to a `Pizza`
 
-### Premium Partners
+Start by creating the models and migrations for the following database tables:
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+Add any code needed in the model files to establish the relationships. Then, run the migrations.
 
-## Contributing
+ You are welcome to generate your own seed data to test the application.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Validations
+Add validations to the `RestaurantPizza` model:
 
-## Code of Conduct
+- must have a `price` between 1 and 30
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Routes
+Set up the following routes. Make sure to return JSON data in the format
 
-## Security Vulnerabilities
+specified along with the appropriate HTTP verb.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+1. GET /restaurants
 
-## License
+Return JSON data in the format below:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```
+
+[
+
+  {
+
+    "id": 1,
+
+    "name": "Sottocasa NYC",
+
+    "address": "298 Atlantic Ave, Brooklyn, NY 11201"
+
+  },
+
+  {
+
+    "id": 2,
+
+    "name": "PizzArte",
+
+    "address": "69 W 55th St, New York, NY 10019"
+
+  }
+
+]
+
+```
+
+
+2. GET /restaurants/:id
+
+If the `Restaurant` exists, return JSON data in the format below:
+
+```
+
+{
+
+  "id": 1,
+
+  "name": "Sottocasa NYC",
+
+  "address": "298 Atlantic Ave, Brooklyn, NY 11201",
+
+  "pizzas": [
+
+    {
+
+      "id": 1,
+
+      "name": "Cheese",
+
+      "ingredients": "Dough, Tomato Sauce, Cheese"
+
+    },
+
+    {
+
+      "id": 2,
+
+      "name": "Pepperoni",
+
+      "ingredients": "Dough, Tomato Sauce, Cheese, Pepperoni"
+
+    }
+
+  ]
+
+}
+
+```
+
+If the `Restaurant` does not exist, return the following JSON data, along with
+
+the appropriate HTTP status code:
+
+```
+
+{
+
+  "error": "Restaurant not found"
+
+}
+
+```
+
+
+3. DELETE /restaurants/:id
+
+If the `Restaurant` exists, it should be removed from the database, along with
+
+any `RestaurantPizza`s that are associated with it (a `RestaurantPizza` belongs
+
+to a `Restaurant`, so you need to delete the `RestaurantPizza`s before the
+
+`Restaurant` can be deleted).
+
+After deleting the `Restaurant`, return an _empty_ response body, along with the
+
+appropriate HTTP status code.
+
+If the `Restaurant` does not exist, return the following JSON data, along with
+
+the appropriate HTTP status code:
+
+```
+
+{
+
+  "error": "Restaurant not found"
+
+}
+
+```
+
+ 
+4. GET /pizzas
+
+Return JSON data in the format below:
+
+```
+
+[
+
+  {
+
+    "id": 1,
+
+    "name": "Cheese",
+
+    "ingredients": "Dough, Tomato Sauce, Cheese"
+
+  },
+
+  {
+
+    "id": 2,
+
+    "name": "Pepperoni",
+
+    "ingredients": "Dough, Tomato Sauce, Cheese, Pepperoni"
+
+  }
+
+]
+
+```
+
+5. POST /restaurant_pizzas
+
+This route should create a new `RestaurantPizza` that is associated with an
+
+existing `Pizza` and `Restaurant`. It should accept an object with the following
+
+properties in the body of the request:
+
+```
+
+{
+
+  "price": 5,
+
+  "pizza_id": 1,
+
+  "restaurant_id": 3
+
+}
+
+```
+
+If the `RestaurantPizza` is created successfully, send back a response with the data
+
+related to the `Pizza`:
+
+```
+
+{
+
+  "id": 1,
+
+  "name": "Cheese",
+
+  "ingredients": "Dough, Tomato Sauce, Cheese"
+
+}
+
+```
+
+If the `RestaurantPizza` is **not** created successfully, return the following
+
+JSON data, along with the appropriate HTTP status code:
+
+```
+
+{
+
+  "errors": ["validation errors"]
+
+}
+
+```
