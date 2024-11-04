@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Pizza>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Restaurant>
  */
-class PizzaFactory extends Factory
+class RestaurantFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,7 +18,7 @@ class PizzaFactory extends Factory
     {
         return [
             'name' => fake()->text(10),
-            'ingredients' => fake()->text(30),
+            'address' => fake()->text(10),
         ];
     }
 }
